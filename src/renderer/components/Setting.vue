@@ -122,7 +122,7 @@ export default defineComponent({
 
           if (!name && path) {
             // default name
-            repo.name = basename(path).substring(0, 10)
+            repo.name = basename(path).substring(0, 12)
           } else if (name && !path) {
             const msg = t('setting-panel.error-choose-repo-path')
             toast.show('warning', msg)
