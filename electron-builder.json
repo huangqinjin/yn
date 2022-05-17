@@ -29,11 +29,17 @@
   },
   "linux": {
     "executableName": "yank-note",
-    "category": "Markdown",
+    "category": "Utility",
     "maintainer": "purocean <purocean@outlook.com>",
     "icon": "./build/icon.icns",
     "target": [
-      "deb"
+      "deb",
+      "rpm"
+    ]
+  },
+  "rpm":{
+    "depends":[
+      "/usr/lib64/libuuid.so.1"
     ]
   },
   "mac": {
