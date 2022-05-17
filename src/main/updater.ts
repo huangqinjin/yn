@@ -16,7 +16,7 @@ autoUpdater.logger = logger
 let progressBar: any = null
 
 const isAppx = app.getAppPath().indexOf('\\WindowsApps\\') > -1
-const disabled = isAppx || process.mas
+const disabled = isAppx || process.mas || true
 
 const httpRequest = (Provider.prototype as any).httpRequest
 ;(Provider.prototype as any).httpRequest = function (url: URL, headers: Record<string, string>, ...args: any[]) {
