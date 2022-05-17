@@ -29,7 +29,8 @@ const isLinux = os.platform() === 'linux'
 
 let urlMode: 'scheme' | 'dev' | 'prod' = 'scheme'
 
-const trayEnabled = !(yargs.argv['disable-tray'])
+const trayEnabled = !(yargs.argv['disable-tray'] ?? config.get('disable-tray', false))
+const silentStart = Boolean(yargs.argv['silent-start'] ?? config.get('silent-start', false))
 const backendPort = Number(yargs.argv.port) || config.get('server.port', 3044)
 const devFrontendPort = 8066
 
@@ -122,8 +123,9 @@ const createWindow = () => {
   win.setMenu(null)
   win && win.loadURL(getUrl())
   restoreWindowBounds()
-  win.on('ready-to-show', () => {
+  silentStart || win.on('ready-to-show', () => {
     win!.show()
+    // win!.maximize()
   })
 
   win.on('close', e => {
