@@ -20,6 +20,7 @@
     "test": "yarn run jest --coverage --coverage-reporters=text --silent",
     "api-doc": "yarn run typedoc --options .typedoc.json",
     "prepare": "husky install",
+    "release": "node scripts/download-pandoc.js && yarn run electron-builder --x64 --linux rpm --publish never",
     "rebuild-pty": "electron-rebuild -f -w node-pty"
   },
   "dependencies": {
