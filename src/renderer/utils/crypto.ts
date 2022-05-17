@@ -46,3 +46,15 @@ export function decrypt (content: any, password: string) {
 
   return { content: result, passwordHash }
 }
+
+export function license (expires: string, info: any) {
+  info ??= {}
+  expires ??= '9999-12-31'
+  info.expires = info.activateExpires = new Date(expires).getTime()
+  const license = 'yank-note-license' + JSON.stringify(info)
+  const password = CryptoJS.MD5('').toString()
+  const { content } = encrypt(license, password)
+  let licenseStr = CryptoJS.enc.Utf8.parse(password + content).toString(CryptoJS.enc.Hex)
+  licenseStr = licenseStr.split('').reverse().join('')
+  return licenseStr
+}
