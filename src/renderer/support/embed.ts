@@ -15,7 +15,7 @@ import { FLAG_DEBUG } from './args'
  */
 export function buildSrc (html: string, title = '', globalStyle = false) {
   const debug = FLAG_DEBUG
-  return `/embed/?_=${md5(html)}#title=${encodeURIComponent(title)}&with-global-style=${globalStyle}&debug=${debug}&html=${encodeURIComponent(html)}`
+  return `./embed?_=${md5(html)}#title=${encodeURIComponent(title)}&with-global-style=${globalStyle}&debug=${debug}&html=${encodeURIComponent(html)}`
 }
 
 export const IFrame = defineComponent({
