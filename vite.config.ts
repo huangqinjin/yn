@@ -17,6 +17,7 @@ if (!fs.existsSync(vsDist)) {
 export default defineConfig({
   plugins: [vue(), vueJsx()],
   root: 'src/renderer',
+  base: './',
   define: {
     __APP_VERSION__: JSON.stringify(process.env.npm_package_version)
   },
