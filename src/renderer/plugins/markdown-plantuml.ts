@@ -8,7 +8,7 @@ import { Plugin } from '@fe/context'
 
 const emptySrc = 'data:image/gif;base64,R0lGODlhAQABAAD/ACwAAAAAAQABAAACADs='
 
-const baseUrl = location.origin + '/api/plantuml/png'
+const baseUrl = location.origin + location.pathname + 'api/plantuml/png'
 
 const MarkdownItPlugin = function umlPlugin (md: Markdown, options: any) {
   function generateSourceDefault (umlCode: string) {
