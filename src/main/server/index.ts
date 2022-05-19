@@ -6,7 +6,6 @@ import Koa from 'koa'
 import bodyParser from 'koa-body'
 import * as mime from 'mime'
 import request from 'request'
-import { promisify } from 'util'
 import { STATIC_DIR, HOME_DIR, HELP_DIR, USER_PLUGIN_DIR, FLAG_DISABLE_SERVER, APP_NAME, USER_THEME_DIR, RESOURCES_DIR, BUILD_IN_STYLES, USER_EXTENSION_DIR } from '../constant'
 import * as file from './file'
 import run from './run'
@@ -424,24 +423,17 @@ const rpc = async (ctx: any, next: any) => {
   }
 }
 
-const sendFile = async (ctx: any, next: any, filePath: string, fullback = true) => {
-  if (!fs.existsSync(filePath)) {
-    if (fullback) {
-      await sendFile(ctx, next, path.resolve(STATIC_DIR, 'index.html'), false)
-    } else {
-      next()
-    }
-
+const sendFile = async (ctx: any, next: any, filePath: string): Promise<boolean> => {
+  const fileStat = fs.statSync(filePath, { throwIfNoEntry: false })
+  if (!fileStat) {
+    next && next()
     return false
   }
-
-  const fileStat = fs.statSync(filePath)
   if (fileStat.isDirectory()) {
-    await sendFile(ctx, next, path.resolve(filePath, 'index.html'))
-    return true
+    return sendFile(ctx, next, path.resolve(filePath, 'index.html'))
   }
 
-  ctx.body = await promisify(fs.readFile)(filePath)
+  ctx.body = await fs.readFile(filePath)
   ctx.set('Content-Length', fileStat.size)
   ctx.set('Last-Modified', fileStat.mtime.toUTCString())
   ctx.set('Cache-Control', 'max-age=0')
@@ -457,7 +449,7 @@ const userExtension = async (ctx: any, next: any) => {
       ctx.body = result('ok', 'success', await extension.list())
     } else if (ctx.path.startsWith('/extensions/') && ctx.method === 'GET') {
       const filePath = path.join(USER_EXTENSION_DIR, ctx.path.replace('/extensions', ''))
-      await sendFile(ctx, next, filePath, false)
+      await sendFile(ctx, next, filePath)
     } else {
       await next()
     }
@@ -522,8 +514,8 @@ const server = (port = 3000) => {
   app.use(async (ctx: any, next: any) => {
     const urlPath = decodeURIComponent(ctx.path).replace(/^(\/static\/|\/)/, '')
 
-    if (!(await sendFile(ctx, next, path.resolve(STATIC_DIR, urlPath), false))) {
-      await sendFile(ctx, next, path.resolve(USER_THEME_DIR, urlPath), true)
+    if (!(await sendFile(ctx, null, path.resolve(STATIC_DIR, urlPath)))) {
+      await sendFile(ctx, next, path.resolve(USER_THEME_DIR, urlPath))
     }
   })
 
