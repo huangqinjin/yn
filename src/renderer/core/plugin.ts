@@ -41,6 +41,6 @@ export function init <Ctx> (plugins: Plugin[], ctx: Ctx) {
   window.registerPlugin = (plugin: Plugin) => register(plugin, ctx)
 
   const script = window.document.createElement('script')
-  script.src = '/api/plugins'
+  script.src = './api/plugins'
   window.document.body.appendChild(script)
 }
