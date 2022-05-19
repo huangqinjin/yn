@@ -3,7 +3,7 @@
     <div class="wrapper" @click.stop>
       <h3>{{$t('export-panel.export')}}</h3>
       <iframe @load="complete" width="0" height="0" hidden id="export-download" name="export-download" @loadedmetadata="close" />
-      <form ref="refExportForm" :action="`/api/convert/${convert.fileName}`" method="post" target="export-download">
+      <form ref="refExportForm" :action="`./api/convert/${convert.fileName}`" method="post" target="export-download">
         <input type="hidden" name="source" :value="convert.source">
         <input type="hidden" name="resourcePath" :value="convert.resourcePath">
         <div style="padding: 20px">
