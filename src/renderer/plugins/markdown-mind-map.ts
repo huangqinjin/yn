@@ -480,16 +480,16 @@ export default {
 
       const style = document.createElement('link')
       style.rel = 'stylesheet'
-      style.href = '/kity/kityminder.core.css'
+      style.href = './kity/kityminder.core.css'
       document.getElementsByTagName('head')[0].appendChild(style)
 
       const script1 = document.createElement('script')
-      script1.src = '/kity/kity.min.js'
+      script1.src = './kity/kity.min.js'
       script1.async = false
       document.body.appendChild(script1)
 
       const script2 = document.createElement('script')
-      script2.src = '/kity/kityminder.core.min.js'
+      script2.src = './kity/kityminder.core.min.js'
       script2.async = false
       document.body.appendChild(script2)
 
