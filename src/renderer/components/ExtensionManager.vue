@@ -384,7 +384,7 @@ async function fetchContent (type: 'readme' | 'changelog', extension: Extension)
     })
 
     contentMap.value[type][extension.id] = `
-      <link rel="stylesheet" href="${location.origin}/github.css">
+      <link rel="stylesheet" href="./github.css">
       <div style="padding: 12px" class="markdown-body">
         ${markdownIt.render(markdown)}
       </div>

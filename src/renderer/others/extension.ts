@@ -39,7 +39,7 @@ export function getInstalledExtensionFileUrl (id: string, filename: string) {
     return filename
   }
 
-  return path.join('/extensions', getExtensionPath(id, filename))
+  return path.join('./extensions', getExtensionPath(id, filename))
 }
 
 export function getLoadStatus (id: string): ExtensionLoadStatus {
