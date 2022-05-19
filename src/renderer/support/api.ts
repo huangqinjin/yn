@@ -19,6 +19,10 @@ export async function fetchHttp (input: RequestInfo, init?: RequestInit) {
 
   init.headers = { ...init.headers, ...getAuthHeader() }
 
+  if (typeof input === 'string' && input.startsWith('/')) {
+    input = '.' + input
+  }
+
   const response = await fetch(input, init)
 
   if (!response.headers.get('content-type')?.includes('json')) {
@@ -49,7 +53,7 @@ export async function fetchHttp (input: RequestInfo, init?: RequestInit) {
 export async function proxyRequest (url: string, reqOptions: Record<string, any> = {}, usePost = false) {
   let res: Response
   if (usePost) {
-    res = await fetch('/api/proxy', {
+    res = await fetch('./api/proxy', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json', ...getAuthHeader() },
       body: JSON.stringify({
@@ -59,7 +63,7 @@ export async function proxyRequest (url: string, reqOptions: Record<string, any>
     })
   } else {
     const options = encodeURIComponent(JSON.stringify(reqOptions))
-    res = await fetch(`/api/proxy?url=${encodeURIComponent(url)}&options=${options}`, {
+    res = await fetch(`./api/proxy?url=${encodeURIComponent(url)}&options=${options}`, {
       headers: getAuthHeader()
     })
   }
