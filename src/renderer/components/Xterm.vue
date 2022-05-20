@@ -99,7 +99,7 @@ export default defineComponent({
         const uri = location.protocol.startsWith('http')
           ? location.origin
           : 'http://' + location.hostname + ':' + $args().get('port')
-        socket = io(uri, { path: '/ws' })
+        socket = io(uri, { path: location.pathname + 'ws' })
 
         xterm.onResize(size => socket!.emit('resize', [size.cols, size.rows]))
         xterm.onData(input)
