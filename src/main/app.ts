@@ -6,7 +6,7 @@ import * as os from 'os'
 import * as yargs from 'yargs'
 import server from './server'
 import store from './storage'
-import { APP_NAME } from './constant'
+import { WEBROOT, APP_NAME } from './constant'
 import { getTrayMenus, getMainMenus } from './menus'
 import { transformProtocolRequest } from './protocol'
 import startup from './startup'
@@ -73,7 +73,7 @@ const getUrl = (mode?: typeof urlMode) => {
   const proto = mode === 'scheme' ? APP_NAME : 'http'
   const port = proto === 'http' ? (mode === 'dev' ? devFrontendPort : backendPort) : ''
 
-  return `${proto}://localhost:${port}` + (query ? `?${query}` : '')
+  return `${proto}://localhost:${port}${WEBROOT}/` + (query ? `?${query}` : '')
 }
 
 const hideWindow = () => {

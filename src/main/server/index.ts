@@ -6,7 +6,7 @@ import Koa from 'koa'
 import bodyParser from 'koa-body'
 import * as mime from 'mime'
 import request from 'request'
-import { STATIC_DIR, HOME_DIR, HELP_DIR, USER_PLUGIN_DIR, FLAG_DISABLE_SERVER, APP_NAME, USER_THEME_DIR, RESOURCES_DIR, BUILD_IN_STYLES, USER_EXTENSION_DIR } from '../constant'
+import { WEBROOT, STATIC_DIR, HOME_DIR, HELP_DIR, USER_PLUGIN_DIR, FLAG_DISABLE_SERVER, APP_NAME, USER_THEME_DIR, RESOURCES_DIR, BUILD_IN_STYLES, USER_EXTENSION_DIR } from '../constant'
 import * as file from './file'
 import run from './run'
 import convert from './convert'
@@ -493,6 +493,15 @@ const server = (port = 3000) => {
     }
   }))
 
+  app.use(async (ctx, next) => {
+    switch (ctx.path.startsWith(WEBROOT) ? ctx.path.charAt(WEBROOT.length) : '\0') {
+      case '': ctx.path = '/'; break
+      case '/': ctx.path = ctx.path.substring(WEBROOT.length); break
+      default: console.warn('NO WEBROOT: ' + ctx.path); break
+    }
+    await next()
+  })
+
   app.use(async (ctx: any, next: any) => await wrapper(ctx, next, checkPermission))
   app.use(async (ctx: any, next: any) => await wrapper(ctx, next, fileContent))
   app.use(async (ctx: any, next: any) => await wrapper(ctx, next, attachment))
@@ -528,7 +537,7 @@ const server = (port = 3000) => {
   // eslint-disable-next-line @typescript-eslint/no-var-requires
   const server = require('http').createServer(callback)
   // eslint-disable-next-line @typescript-eslint/no-var-requires
-  const io = require('socket.io')(server, { path: '/ws' })
+  const io = require('socket.io')(server, { path: `${WEBROOT}/ws` })
   // eslint-disable-next-line @typescript-eslint/no-var-requires
   const pty = require('node-pty')
 
@@ -561,7 +570,7 @@ const server = (port = 3000) => {
   const host = config.get('server.host', 'localhost')
   server.listen(port, host)
 
-  console.log(`Address: http://${host}:${port}`)
+  console.log(`Address: http://${host}:${port}${WEBROOT}/`)
 
   return callback
 }

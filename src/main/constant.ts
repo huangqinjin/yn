@@ -7,7 +7,7 @@ import { convertAppPath } from './helper'
 const homedir = isWsl ? toWslPath(getWinHomePath()) : os.homedir()
 
 export const APP_NAME = 'yank-note'
-
+export const WEBROOT = (yargs.argv.webroot as string) || ''
 export const HOME_DIR = homedir
 export const USER_DIR = path.resolve((yargs.argv['data-dir'] as any) || path.join(homedir, `.${APP_NAME}`))
 export const CONFIG_FILE = path.join(USER_DIR, 'config.json')
